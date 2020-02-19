@@ -2,6 +2,7 @@
 
 const mysql = require("mysql");
 const inquirer = require("inquirer");
+const cTable = require("console.table");
 
 const promptMessages = {
   viewEmployees: "View All Employees",
@@ -27,10 +28,10 @@ const connection = mysql.createConnection({
 
 // console.log('
 
-// _      __    ____                  
-// | | /| / /__ / / /______  __ _  ___ 
+// _      __    ____
+// | | /| / /__ / / /______  __ _  ___
 // | |/ |/ / -_) / / __/ _ \/  ' \/ -_)
-// |__/|__/\__/_/_/\__/\___/_/_/_/\__/ 
+// |__/|__/\__/_/_/\__/\___/_/_/_/\__/
 // ')
 
 connection.connect(err => {
@@ -91,19 +92,151 @@ function prompt() {
       }
     });
 }
-
-function viewAll() {
-  const query = `
-  SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary
-  FROM employee
-  INNER JOIN role ON (role.id = employee.role_id)
-  INNER JOIN department ON (department.id = role.department_id)
-  ORDER BY employee.id;
-  `;
+function queryTable(query) {
   connection.query(query, (err, res) => {
     if (err) throw err;
     console.table(res);
     prompt();
   });
 }
+function viewAll() {
+  const query = `
+  SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+  FROM employee
+  LEFT JOIN employee manager on manager.id = employee.manager_id
+  INNER JOIN role ON (role.id = employee.role_id)
+  INNER JOIN department ON (department.id = role.department_id)
+  ORDER BY department.name, employee.id;
+  `;
+  queryTable(query);
+}
 
+function viewByDep() {
+  const query = `
+  SELECT department.name AS department, role.title, employee.id, employee.first_name, employee.last_name, role.salary
+  FROM employee
+  INNER JOIN role ON (role.id = employee.role_id)
+  INNER JOIN department ON (department.id = role.department_id)
+  ORDER BY department.name;
+  `;
+  queryTable(query);
+}
+
+function viewByMan() {
+  const query = `
+  SELECT CONCAT(manager.first_name, ' ', manager.last_name) AS manager, employee.first_name, employee.last_name, role.title, employee.id, role.salary
+  FROM employee
+  LEFT JOIN employee manager on manager.id = employee.manager_id
+  INNER JOIN role ON (role.id = employee.role_id && employee.manager_id != 'NULL')
+  INNER JOIN department ON (department.id = role.department_id)
+  ORDER BY manager;
+  `;
+  queryTable(query);
+}
+
+function addEmployee() {
+  inquirer
+    .prompt([
+      {
+        name: "fName",
+        type: "input",
+        message: "Enter Their First Name"
+      },
+      {
+        name: "lName",
+        type: "input",
+        message: "Enter Their Last Name"
+      },
+      {
+        name: "position",
+        type: "list",
+        message: "What would you like to do?",
+        choices: [
+          "Lead Engineer",
+          "Software Engineer",
+          "Legal Team Lead",
+          "Lawyer",
+          "Sales Lead",
+          "Sales Rep",
+          "Media Director",
+          "Media Reporter",
+          "HR Director",
+          "HR Associate"
+        ]
+      }
+    ])
+    .then(newEmployee => {
+      switch (`${newEmployee.position}`) {
+        case "Lead Engineer":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 1, 1);
+          `;
+          queryTable(query);
+          break;
+        case "Software Engineer":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 2, 1);
+          `;
+          queryTable(query);
+          break;
+        case "Legal Team Lead":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 3, 4);
+          `;
+          queryTable(query);
+          break;
+        case "Lawyer":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 4, 4);
+          `;
+          queryTable(query);
+          break;
+        case "Sales Lead":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 5, 2);
+          `;
+          queryTable(query);
+          break;
+        case "Sales Rep":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 6, 2);
+          `;
+          queryTable(query);
+          break;
+        case "Media Director":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 7, 5);
+          `;
+          queryTable(query);
+          break;
+        case "Media Reporter":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 8, 5);
+          `;
+          queryTable(query);
+          break;
+        case "HR Director":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 9, 3);
+          `;
+          queryTable(query);
+          break;
+        case "HR Associate":
+          const query = `
+          INSERT INTO employee (first_name, last_name, role_id, manager_id)
+          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 10, 3);
+          `;
+          queryTable(query);
+          break;
+      }
+    });
+}
