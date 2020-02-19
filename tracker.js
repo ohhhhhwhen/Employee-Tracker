@@ -25,6 +25,14 @@ const connection = mysql.createConnection({
   database: "employeeTracker_db"
 });
 
+// console.log('
+
+// _      __    ____                  
+// | | /| / /__ / / /______  __ _  ___ 
+// | |/ |/ / -_) / / __/ _ \/  ' \/ -_)
+// |__/|__/\__/_/_/\__/\___/_/_/_/\__/ 
+// ')
+
 connection.connect(err => {
   if (err) throw err;
   prompt();
@@ -50,31 +58,31 @@ function prompt() {
     .then(answer => {
       switch (answer.action) {
         case promptMessages.viewEmployees:
-          artistSearch();
+          viewAll();
           break;
 
         case promptMessages.viewEmployeesByDep:
-          multiSearch();
+          viewByDep();
           break;
 
         case promptMessages.viewEmployeesByMan:
-          rangeSearch();
+          viewByMan();
           break;
 
         case promptMessages.addEmployee:
-          songSearch();
+          addEmployee();
           break;
 
         case promptMessages.removeEmployee:
-          songSearch();
+          removeEmployee();
           break;
 
         case promptMessages.updateEmployeeRole:
-          songSearch();
+          updateEmployeeRol();
           break;
 
         case promptMessages.updateEmployeeMan:
-          songSearch();
+          updateEmployeeMan();
           break;
 
         case promptMessages.exit:
@@ -84,89 +92,18 @@ function prompt() {
     });
 }
 
-function artistSearch() {
-  const query = "SELECT position, song, year FROM top5000 WHERE ?";
-  connection.query(query, { artist: answer.artist }, (err, res) => {
-    if (err) throw err;
-    printRows(res);
-    prompt();
-  });
-}
-
-function multiSearch() {
-  const query =
-    "SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1";
+function viewAll() {
+  const query = `
+  SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name, role.salary
+  FROM employee
+  INNER JOIN role ON (role.id = employee.role_id)
+  INNER JOIN department ON (department.id = role.department_id)
+  ORDER BY employee.id;
+  `;
   connection.query(query, (err, res) => {
     if (err) throw err;
-    res.map(row => console.log(row.artist));
+    console.table(res);
     prompt();
   });
 }
 
-function rangeSearch() {
-  inquirer
-    .prompt([
-      {
-        name: "start",
-        type: "input",
-        message: "Enter starting position: ",
-        validate: value => !isNaN(value)
-      },
-      {
-        name: "end",
-        type: "input",
-        message: "Enter ending position: ",
-        validate: value => !isNaN(value)
-      }
-    ])
-    .then(answer => {
-      const query =
-        "SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?";
-      connection.query(query, [answer.start, answer.end], (err, res) => {
-        if (err) throw err;
-        printRows(res);
-        prompt();
-      });
-    });
-}
-
-function songSearch() {
-  inquirer
-    .prompt({
-      name: "song",
-      type: "input",
-      message: "What song would you like to look for?"
-    })
-    .then(answer => {
-      console.log(answer.song);
-      connection.query(
-        "SELECT * FROM top5000 WHERE ?",
-        { song: answer.song },
-        (err, res) => {
-          if (err) throw err;
-          printRow(res[0]);
-          prompt();
-        }
-      );
-    });
-}
-
-function printRows(rows) {
-  for (let row of rows) {
-    printRow(row);
-  }
-}
-
-function printRow(row) {
-  if (row) {
-    let rowAsString = "";
-    for (let key in row) {
-      rowAsString += getPrintableColumn(row, key);
-    }
-    console.log(rowAsString);
-  }
-}
-
-function getPrintableColumn(row, column) {
-  return `${column}: ${row[column]} | `;
-}

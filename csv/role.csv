@@ -1,0 +1,10 @@
+id, title, salary, department_id
+2004, Lead Engineer, 1234567, 619
+0101, Software Engineer, 765432, 619
+1994, Legal Team Lead, 300000, 786
+0410, Lawyer, 80808, 786
+2009, Sales Lead, 224455, 813
+5555, Sales Rep, 32132, 813
+2003, Media Director, 45678, 716
+0619, Media Reporter, 619169, 716
+0911, HR Director, 456654, 911
