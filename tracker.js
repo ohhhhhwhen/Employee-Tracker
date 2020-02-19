@@ -166,76 +166,67 @@ function addEmployee() {
       }
     ])
     .then(newEmployee => {
+      let addQuery;
       switch (`${newEmployee.position}`) {
         case "Lead Engineer":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 1, 1);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 1, 1);
           `;
-          queryTable(query);
           break;
         case "Software Engineer":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 2, 1);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 2, 1);
           `;
-          queryTable(query);
           break;
         case "Legal Team Lead":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 3, 4);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 3, 4);
           `;
-          queryTable(query);
           break;
         case "Lawyer":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 4, 4);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 4, 4);
           `;
-          queryTable(query);
           break;
         case "Sales Lead":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 5, 2);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 5, 2);
           `;
-          queryTable(query);
           break;
         case "Sales Rep":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 6, 2);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 6, 2);
           `;
-          queryTable(query);
           break;
         case "Media Director":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 7, 5);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 7, 5);
           `;
-          queryTable(query);
           break;
         case "Media Reporter":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 8, 5);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 8, 5);
           `;
-          queryTable(query);
           break;
         case "HR Director":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 9, 3);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 9, 3);
           `;
-          queryTable(query);
           break;
         case "HR Associate":
-          const query = `
+          addQuery = `
           INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES (${newEmployee.fName}, ${newEmployee.lName}, 10, 3);
+          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 10, 3);
           `;
-          queryTable(query);
           break;
       }
     });
