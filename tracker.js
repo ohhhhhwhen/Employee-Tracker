@@ -10,8 +10,6 @@ const promptMessages = {
   viewEmployeesByMan: "View All Employees By Manager",
   addEmployee: "Add An Employee",
   removeEmployee: "Remove An Employee",
-  updateEmployeeRole: "Update Employee Role",
-  updateEmployeeMan: "Update Employee Manager",
   exit: "exit"
 };
 
@@ -62,8 +60,6 @@ function prompt() {
         promptMessages.viewEmployeesByMan,
         promptMessages.addEmployee,
         promptMessages.removeEmployee,
-        promptMessages.updateEmployeeRole,
-        promptMessages.updateEmployeeMan,
         promptMessages.exit
       ]
     })
