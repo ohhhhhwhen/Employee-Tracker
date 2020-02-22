@@ -89,14 +89,6 @@ function prompt() {
           removeEmployee();
           break;
 
-        case promptMessages.updateEmployeeRole:
-          updateEmployeeRol();
-          break;
-
-        case promptMessages.updateEmployeeMan:
-          updateEmployeeMan();
-          break;
-
         case promptMessages.exit:
           connection.end();
           break;
@@ -180,65 +172,73 @@ function addEmployee() {
       let addQuery;
       switch (`${newEmployee.position}`) {
         case "Lead Engineer":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 1, 1);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 1, 1);
+          prompt();
           break;
         case "Software Engineer":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 2, 1);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 2, 1);
+          prompt();
           break;
         case "Legal Team Lead":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 3, 4);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 3, 4);
+          prompt();
           break;
         case "Lawyer":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 4, 4);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 4, 4);
+          prompt();
           break;
         case "Sales Lead":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 5, 2);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 5, 2);
+          prompt();
           break;
         case "Sales Rep":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 6, 2);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 6, 2);
+          prompt();
           break;
         case "Media Director":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 7, 5);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 7, 5);
+          prompt();
           break;
         case "Media Reporter":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 8, 5);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 8, 5);
+          prompt();
           break;
         case "HR Director":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 9, 3);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 9, 3);
+          prompt();
           break;
         case "HR Associate":
-          addQuery = `
-          INSERT INTO employee (first_name, last_name, role_id, manager_id)
-          VALUES ('${newEmployee.fName}', '${newEmployee.lName}', 10, 3);
-          `;
+          addingThem(newEmployee.fName, newEmployee.lName, 10, 3);
+          prompt();
           break;
       }
+    });
+}
+
+function addingThem(first, last, rI, mI) {
+  let addQuery = `
+  INSERT INTO employee (first_name, last_name, role_id, manager_id)
+  VALUES (?, ?, ?, ?);
+  `;
+  connection.query(addQuery, [first, last, rI, mI], (err, res) => {
+    if (err) throw err;
+  });
+}
+
+function removeEmployee() {
+  inquirer
+    .prompt({
+      name: "employeeID",
+      type: "input",
+      message: "Enter Their ID Of The Employee You Wish To Delete"
+    })
+    .then(removeThem => {
+      let removeQuery = `
+      DELETE FROM employee WHERE employee.id = ?
+      `;
+      connection.query(removeQuery, removeThem.employeeID, (err, res) => {
+        if (err) throw err;
+        prompt();
+      });
     });
 }
