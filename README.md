@@ -17,7 +17,8 @@ than will be adjusted manually and through a
 connected javascript console. Focusing on the idea
 of an employee tracker to show tables with different
 employee information. The console not only views the 
-tables but can add and delete employee info.
+tables but can add and delete employee info. All while 
+connecting through a local mysql database. 
 	
 ## Technologies
 Project is created with:
