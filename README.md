@@ -1,15 +1,15 @@
 # Employee-Tracker
 
 ## Table of contents
-* [Deployed Repo](#deployed-repo)
+* [Github Repo](#github-repo)
 * [Assignment Info](#assignment-info)
 * [Technologies](#technologies)
 * [Running Pages](#running-pages)
 * [Key Notes](#key-notes)
 
-## Deployed Repo
+## Github Repo
 * HTML
- https://note-taker-owen.herokuapp.com/
+ https://github.com/ohhhhhwhen/Employee-Tracker
 
 ## Assignment info
 Using mysql workbench to create tables,
